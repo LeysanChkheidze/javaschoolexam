@@ -18,6 +18,7 @@ public class Calculator {
     final static String ALLOWED_SYMBOLS_REGEX = "[\\d().+\\-/*]+";
     final static Pattern ALLOWED_SYMBOLS_PATTERN = Pattern.compile(ALLOWED_SYMBOLS_REGEX);
     final static int DECIMAL_DIGITS = 4;
+    final static Set<Character> UNREPEATABLE_SYMBOLS = new HashSet<>(Arrays.asList('+', '-', '/', '*', '.'));
 
     /**
      * Evaluate statement represented as string.
@@ -75,9 +76,8 @@ public class Calculator {
     }
 
     private boolean validateNoRepeated(String statement) {
-        Set<Character> symbols = new HashSet<>(Arrays.asList('+', '-', '/', '*', '.'));
         for (int i = 0; i < statement.length() - 1; i++) {
-            if (symbols.contains(statement.charAt(i))) {
+            if (UNREPEATABLE_SYMBOLS.contains(statement.charAt(i))) {
                 if (statement.charAt(i) == statement.charAt(i + 1)) {
                     return false;
                 }
