@@ -28,13 +28,10 @@ public class Calculator {
      * @return string value containing result of evaluation or null if statement is invalid
      */
     public String evaluate(String statement) {
-        try {
-            validateNotEmpty(statement);
-            validateStatementSymbols(statement);
-            validateClosedBraces(statement);
-            validateNoRepeated(statement);
-
-        } catch (IllegalArgumentException e) {
+        if (!validateNotEmpty(statement) ||
+                !validateStatementSymbols(statement) ||
+                !validateClosedBraces(statement) ||
+                !validateNoRepeated(statement)) {
             return null;
         }
 
@@ -56,14 +53,12 @@ public class Calculator {
     }
 
 
-    private void validateStatementSymbols(String statement) {
+    private boolean validateStatementSymbols(String statement) {
         Matcher matcherSymbols = ALLOWED_SYMBOLS_PATTERN.matcher(statement);
-        if (!matcherSymbols.matches()) {
-            throw new IllegalArgumentException();
-        }
+        return matcherSymbols.matches();
     }
 
-    private void validateClosedBraces(String statement) {
+    private boolean validateClosedBraces(String statement) {
         int numOfNotClosed = 0;
         for (int i = 0; i < statement.length(); i++) {
             if (statement.charAt(i) == '(') {
@@ -72,27 +67,23 @@ public class Calculator {
                 numOfNotClosed--;
             }
         }
-        if (numOfNotClosed != 0) {
-            throw new IllegalArgumentException();
-        }
-
+        return numOfNotClosed == 0;
     }
 
-    private void validateNotEmpty(String statement) {
-        if (null == statement || statement.length() == 0) {
-            throw new IllegalArgumentException();
-        }
+    private boolean validateNotEmpty(String statement) {
+        return null != statement && statement.length() != 0;
     }
 
-    private void validateNoRepeated(String statement) {
+    private boolean validateNoRepeated(String statement) {
         Set<Character> symbols = new HashSet<>(Arrays.asList('+', '-', '/', '*', '.'));
         for (int i = 0; i < statement.length() - 1; i++) {
             if (symbols.contains(statement.charAt(i))) {
                 if (statement.charAt(i) == statement.charAt(i + 1)) {
-                    throw new IllegalArgumentException();
+                    return false;
                 }
             }
         }
+        return true;
     }
 
     private boolean isRoundingNeeded(String numberString) {
