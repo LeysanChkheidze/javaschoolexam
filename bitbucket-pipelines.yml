@@ -1,27 +1,35 @@
-#  Template maven-build
+# This is an example Starter pipeline configuration
+# Use a skeleton to build, test and deploy using manual and parallel steps
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
 
-#  This template allows you to test and build your Java project with Maven.
-#  The workflow allows running tests, code checkstyle and security scans on the default branch.
-
-# Prerequisites: pom.xml and appropriate project structure should exist in the repository.
-
-image: maven:3.6.3
+image: atlassian/default-image:3
 
 pipelines:
   default:
     - parallel:
       - step:
-          name: Build and Test
-          caches:
-            - maven
+          name: 'Build and Test'
           script:
-            - mvn -B verify --file pom.xml
-          after-script:
-              # Collect checkstyle results, if any, and convert to Bitbucket Code Insights.
-            - pipe: atlassian/checkstyle-report:0.3.0
+            - echo "Your build and test goes here..."
       - step:
-          name: Security Scan
+          name: 'Lint'
           script:
-            # Run a security scan for sensitive data.
-            # See more security tools at https://bitbucket.org/product/features/pipelines/integrations?&category=security
-            - pipe: atlassian/git-secrets-scan:0.5.1
+            - echo "Your linting goes here..."
+      - step:
+          name: 'Security scan'
+          script:
+            - echo "Your security scan goes here..."
+
+    # The following deployment steps will be executed for each pipeline run. To configure your steps and conditionally deploy see https://support.atlassian.com/bitbucket-cloud/docs/configure-bitbucket-pipelinesyml/
+    - step:
+        name: 'Deployment to Staging'
+        deployment: staging
+        script:
+          - echo "Your deployment to staging script goes here..."
+    - step:
+        name: 'Deployment to Production'
+        deployment: production
+        trigger: 'manual'
+        script:
+          - echo "Your deployment to production script goes here..."
