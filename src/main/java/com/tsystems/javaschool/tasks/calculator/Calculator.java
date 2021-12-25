@@ -41,7 +41,7 @@ public class Calculator {
         }
 
         // create JS engine to execute the script
-        ScriptEngineManager mgr = new ScriptEngineManager();
+        ScriptEngineManager mgr = new ScriptEngineManager(null);
         ScriptEngine engine = mgr.getEngineByName("JavaScript");
 
         try {
