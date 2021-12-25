@@ -1,6 +1,9 @@
 package com.tsystems.javaschool.tasks.subsequence;
 
 import java.util.*;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 public class Subsequence {
 
@@ -29,16 +32,15 @@ public class Subsequence {
             return false;
         }
 
-
         ListIterator iteratorX = x.listIterator();
         Object nextFromX = iteratorX.next();
 
         for (Object element : y) {
-            if (element.equals(nextFromX) && iteratorX.hasNext()) {
-                nextFromX = iteratorX.next();
+            if (element.equals(nextFromX)) {
+                nextFromX = iteratorX.hasNext() ? iteratorX.next() : null;
             }
         }
-        return !iteratorX.hasNext();
+        return nextFromX == null;
     }
 
 }
